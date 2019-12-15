@@ -38,6 +38,7 @@ _help() {
     echo "       --pagespeed-beta .....  Pagespeed module beta release"
     echo "       --naxsi ..... Naxsi WAF module"
     echo "       --rtmp ..... RTMP video streaming module"
+	echo "       --vod ..... VOD streaming module"
     echo "       --openssl-dev ..... Compile Nginx with OpenSSL 3.0.0-dev"
     echo "       --openssl-system ..... Compile Nginx with OpenSSL from system lib"
     echo ""
@@ -73,6 +74,7 @@ else
             PAGESPEED_RELEASE="2"
             NAXSI="y"
             RTMP="y"
+			VOD="y"
             ;;
         --naxsi)
             NAXSI="y"
@@ -88,6 +90,9 @@ else
             ;;
         --rtmp)
             RTMP="y"
+            ;;
+		--vod)
+            VOD="y"
             ;;
         --latest | --mainline)
             NGINX_RELEASE="1"
@@ -241,6 +246,10 @@ if [ "$INTERACTIVE_SETUP" = "1" ]; then
     while [[ "$RTMP" != "y" && "$RTMP" != "n" ]]; do
         echo -e "Select an option [y/n]: " && read -r RTMP
     done
+	echo -e '\nDo you want VOD streaming module (used for video streaming) ? (y/n)'
+    while [[ "$VOD" != "y" && "$VOD" != "n" ]]; do
+        echo -e "Select an option [y/n]: " && read -r VOD
+    done
     echo -e '\nDo you want to build modules as dynamic modules? (y/n)'
     while [[ "$DYNAMIC_MODULES" != "y" && "$DYNAMIC_MODULES" != "n" ]]; do
         echo -e "Select an option [y/n]: " && read -r DYNAMIC_MODULES
@@ -274,6 +283,18 @@ if [ "$RTMP" = "y" ]; then
 else
     NGX_RTMP=""
     RTMP_VALID="NO"
+fi
+
+##################################
+# Set VOD module
+##################################
+
+if [ "$VOD" = "y" ]; then
+    NGX_VOD="--add-module=../nginx-vod-module "
+    VOD_VALID="YES"
+else
+    NGX_VOD=""
+    VOD_VALID="NO"
 fi
 
 ##################################
@@ -644,6 +665,14 @@ _download_modules() {
                 git clone --depth=1 https://github.com/arut/nginx-rtmp-module.git &
             }
         fi
+
+		if [ "$VOD" = "y" ]; then
+			{ [ -d "$DIR_SRC/nginx-vod-module" ] && {
+                git -C "$DIR_SRC/nginx-vod-module" pull &
+            }; } || {
+                git clone --depth=1 https://github.com/kaltura/nginx-vod-module.git &
+            }	
+		fi
 
         # ipscrub module
         { [ -d "$DIR_SRC/ipscrubtmp" ] && {
@@ -1031,6 +1060,7 @@ _configure_nginx() {
                     $NGINX_THIRD_MODULES \
                     $NGX_PAGESPEED \
                     $NGX_RTMP \
+					$NGX_VOD \
                     --add-module=../echo-nginx-module \
                     --add-module=../headers-more-nginx-module \
                     --add-module=../ngx_cache_purge \
