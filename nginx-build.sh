@@ -406,6 +406,7 @@ echo "  - Dynamic modules $DYNAMIC_MODULES_VALID"
 echo "  - Pagespeed : $PAGESPEED_VALID"
 echo "  - Naxsi : $NAXSI_VALID"
 echo "  - RTMP : $RTMP_VALID"
+echo "  - VOD : $VOD_VALID"
 [ -n "$EE_VALID" ] && {
     echo "  - EasyEngine : $EE_VALID"
 }
