@@ -671,7 +671,7 @@ _download_modules() {
 			{ [ -d "$DIR_SRC/nginx-vod-module" ] && {
                 git -C "$DIR_SRC/nginx-vod-module" pull &
             }; } || {
-                git clone --depth=1 https://github.com/kaltura/nginx-vod-module.git &
+                git clone --depth=1 https://github.com/rafuck/nginx-vod-module.git &
             }	
 		fi
 
