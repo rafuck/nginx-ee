@@ -160,6 +160,7 @@ readonly DISTRO_CODENAME="$(lsb_release -sc)"
 readonly DISTRO_NUMBER="$(lsb_release -sr)"
 OPENSSL_COMMIT="3bbec1afed1c65b6f7f645b27808b070e6e7a509"
 export DEBIAN_FRONTEND=noninteractive
+WGET="wget --no-check-certificate"
 
 # Colors
 CSI='\033['
@@ -490,17 +491,17 @@ _nginx_from_scratch_setup() {
 
         {
             # download default nginx page
-            wget -O /var/www/html/index.nginx-debian.html https://raw.githubusercontent.com/VirtuBox/nginx-ee/master/var/www/html/index.nginx-debian.html
+            $WGET -O /var/www/html/index.nginx-debian.html https://raw.githubusercontent.com/VirtuBox/nginx-ee/master/var/www/html/index.nginx-debian.html
             mkdir -p /etc/nginx/sites-enabled
             ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
             # download nginx systemd service
             [ ! -f /lib/systemd/system/nginx.service ] && {
-                wget -O /lib/systemd/system/nginx.service https://raw.githubusercontent.com/VirtuBox/nginx-ee/master/etc/systemd/system/nginx.service
+                $WGET -O /lib/systemd/system/nginx.service https://raw.githubusercontent.com/VirtuBox/nginx-ee/master/etc/systemd/system/nginx.service
                 systemctl enable nginx.service
             }
 
             # download logrotate configuration
-            wget -O /etc/logrotate.d/nginx https://raw.githubusercontent.com/VirtuBox/nginx-ee/master/etc/logrotate.d/nginx
+            $WGET -O /etc/logrotate.d/nginx https://raw.githubusercontent.com/VirtuBox/nginx-ee/master/etc/logrotate.d/nginx
 
         } >> /tmp/nginx-ee.log 2>&1
 
@@ -892,7 +893,7 @@ _download_pagespeed() {
         echo -ne '       Downloading pagespeed                  [..]\r'
 
         {
-            wget -O build_ngx_pagespeed.sh https://raw.githubusercontent.com/pagespeed/ngx_pagespeed/master/scripts/build_ngx_pagespeed.sh
+            $WGET -O build_ngx_pagespeed.sh https://raw.githubusercontent.com/pagespeed/ngx_pagespeed/master/scripts/build_ngx_pagespeed.sh
             chmod +x build_ngx_pagespeed.sh
             if [ "$PAGESPEED_RELEASE" = "1" ]; then
                 ./build_ngx_pagespeed.sh --ngx-pagespeed-version latest-beta -b "$DIR_SRC"
@@ -1151,7 +1152,7 @@ _updating_nginx_manual() {
 _cron_setup() {
     echo -ne '       Installing Nginx-ee Cronjob            [..]\r'
     if {
-        wget -O /etc/cron.daily/nginx-ee https://raw.githubusercontent.com/VirtuBox/nginx-ee/develop/etc/cron.daily/nginx-ee >> /tmp/nginx-ee.log
+        $WGET -O /etc/cron.daily/nginx-ee https://raw.githubusercontent.com/VirtuBox/nginx-ee/develop/etc/cron.daily/nginx-ee >> /tmp/nginx-ee.log
         chmod +x /etc/cron.daily/nginx-ee
 
     }; then
