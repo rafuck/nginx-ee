@@ -1009,11 +1009,11 @@ _configure_nginx() {
         # third party modules
         if [ -z "$OVERRIDE_NGINX_ADDITIONAL_MODULES" ]; then
             if [ "$DYNAMIC_MODULES" = "y" ]; then
+                #--add-dynamic-module=../ngx_http_redis \
+                #--add-dynamic-module=../redis2-nginx-module \
                 NGINX_THIRD_MODULES="--with-compat \
          --add-module=../ngx_http_substitutions_filter_module \
         --add-dynamic-module=../srcache-nginx-module \
-        --add-dynamic-module=../ngx_http_redis \
-        --add-dynamic-module=../redis2-nginx-module \
         --add-dynamic-module=../memc-nginx-module \
         --add-module=../ngx_devel_kit \
         --add-module=../set-misc-nginx-module \
@@ -1021,10 +1021,10 @@ _configure_nginx() {
         --add-module=../nginx-module-vts \
         --add-dynamic-module=../ipscrubtmp/ipscrub"
             else
+                    #--add-module=../ngx_http_redis \
+                    #--add-module=../redis2-nginx-module \
                 NGINX_THIRD_MODULES="--add-module=../ngx_http_substitutions_filter_module \
         --add-module=../srcache-nginx-module \
-        --add-module=../ngx_http_redis \
-        --add-module=../redis2-nginx-module \
         --add-module=../memc-nginx-module \
         --add-module=../ngx_devel_kit \
         --add-module=../set-misc-nginx-module \
