@@ -896,9 +896,9 @@ _download_pagespeed() {
             $WGET -O build_ngx_pagespeed.sh https://raw.githubusercontent.com/pagespeed/ngx_pagespeed/master/scripts/build_ngx_pagespeed.sh
             chmod +x build_ngx_pagespeed.sh
             if [ "$PAGESPEED_RELEASE" = "1" ]; then
-                ./build_ngx_pagespeed.sh --ngx-pagespeed-version latest-beta -b "$DIR_SRC"
+                ./build_ngx_pagespeed.sh --assume-yes --ngx-pagespeed-version latest-beta -b "$DIR_SRC"
             else
-                ./build_ngx_pagespeed.sh --ngx-pagespeed-version latest-stable -b "$DIR_SRC"
+                ./build_ngx_pagespeed.sh --assume-yes --ngx-pagespeed-version latest-stable -b "$DIR_SRC"
             fi
         } >> /tmp/nginx-ee.log 2>&1
 
